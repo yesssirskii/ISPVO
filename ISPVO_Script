@@ -1,0 +1,122 @@
+# ISPVO script
+
+This is a *cheat sheet* consisting of all command lines used during practice.
+
+## Docker  
+
+Checking Docker version:
+```console
+$ docker version
+```
+
+```console
+$ docker run hello-world
+```
+Running Apache HTTPD server:
+
+```console
+$ docker run httpd
+```  
+```console
+$ ip addr
+```
+Connecting to the Apache HTTPD server through a Docker container:
+
+```console
+$ curl 172.17.0.2
+```
+
+```console
+$ curl -v 172.17.0.2
+```
+
+Recieving JSON:
+
+```console
+$ curl -H 'Accept: application/json' https://apps.group.miletic.net/ip/ | jq 
+```  
+Connecting to a URL using CURL:
+
+```console
+$ curl -H https://apps.group.miletic.net/
+```  
+Starting an Apache HTTPD server using ApacheBench:
+```console
+$ docker run httpd ab
+```
+
+```console
+$ docker run httpd ab http://172.17.0.2/
+```
+
+##### List of all current containers:
+```console
+$ docker container list 
+```  
+##### List of all images:
+```console
+$ docker image list
+``` 
+
+10000 requests with 50 cuncurrent users:
+```console
+$ docker run httpd ab -n 10000 -c 50 http://172.17.0.2/
+``` 
+- ab: ApacheBench,
+- -n: number of requests,
+- -c: number of concurrent users.  
+
+> Run ```console docker run httpd ab``` to see all available ApacheBench parameters..  
+
+### MongoDB
+
+Running MongoDB through a Docker container:
+
+```console
+$ docker run mongo
+```
+Running Mongo bash inside a Docker container:
+
+```console
+$ docker run -it mongo bash
+```
+
+Once inside Mongo bash:
+
+```console
+$ ps aux
+```
+
+```console
+$ mongosh
+```
+
+Running a new command inside a Docker container and starting MongoDB:
+
+```console
+$ docker container exec [containerName] mongosh
+```
+Running a new command inside a Docker container and starting MongoDB (MongoDB stays open):
+
+```console
+$ docker container exec -i #containerName mongosh  
+```
+
+We have now successfully entered MongoDB. From here, we can create a new dastabase, table etc.
+
+#### Managing the database
+
+Show all databases:
+
+```console
+$ show dbs
+```
+Creating a new database and entering values:
+
+```console
+$ db.korisnici.insert({ime: "Ivan Matejčić", god: 22})
+```
+Show all values:
+```console
+$ db.korisnici.find()
+```
