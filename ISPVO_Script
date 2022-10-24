@@ -8,9 +8,17 @@ Checking Docker version:
 ```console
 $ docker version
 ```
-
+Running Docker for the fisrt time:
 ```console
 $ docker run hello-world
+```
+List of all containers:
+```console
+$ docker ps
+```
+Restarting Docker:
+```console
+sudo systemctl restart docker
 ```
 Running Apache HTTPD server:
 
@@ -68,7 +76,7 @@ $ docker run httpd ab -n 10000 -c 50 http://172.17.0.2/
 
 > Run ```console docker run httpd ab``` to see all available ApacheBench parameters..  
 
-### MongoDB
+## MongoDB
 
 Running MongoDB through a Docker container:
 
@@ -120,3 +128,74 @@ Show all values:
 ```console
 $ db.korisnici.find()
 ```
+## Playing with networks in Docker
+Managing networks in Docker:
+```console
+$ docker network
+```
+Listing all available networks:
+```console
+$ docker network ls
+```
+Inspecting a particular network within the list:
+```console
+$ docker network inspect host
+```
+> Outputs a JSON object with all network information (as well as all containers connected to that network).
+
+Transferring a docker into a different network:
+
+```console
+$ docker network 
+```
+
+### Task 1:
+>Create a new Docker network. Disconnect an existing Docker container from a network and connect it to the newly created network.
+
+ Creating a new docker network:
+ ```console
+$ docker network create NEW_NETWORK_NAME
+```
+Disconnecting a docker container from a network:
+```console
+$ docker network disconnect OLD_NETWORK_NAME CONTAINER_NAME 
+```
+Connect said container to our new network:
+```console
+$ docker network connect NEW_NETWORK_NAME CONTAINER_NAME
+```
+### Task 2:
+>Make it so that the new network is using the subnet ```172.31.0.0/16```.  
+
+By default, in Docker network the subnet is ```172.18.0.0/16```. If we want/need to change it, we need to specify it when creating a new network:
+```console
+$ docker network create NEW_NETWORK_NAME --subnet=NEW_SUBNET
+```
+Then we can connect a Docker container to this network the same as previously mentioned.
+
+If we want to specify the network we want to connect a new Docker container to, we do it like so:  
+```console
+$ docker run --network=NETWORK_NAME httpd
+```
+### Task 3:  
+>Run  ```curl``` inside a Docker container and connect it with our newly created network. Use it to get the data from the Apache server connected to the same network.  
+Also, try it in a situation where the Apache server isn't connected to the same network.
+
+```console
+$ docker run curlimages/curl:7.85.0 curl --help
+```
+```console
+$ docker run curlimages/curl:7.85.0 --help
+```
+```console
+$ docker run curlimages/curl:7.85.0 curl https://example.group.miletic.net/
+```
+```console
+$ docker run curlimages/curl:7.85.0 -v curl 172.31.0.0
+```
+```console
+$ docker run curlimages/curl:7.85.0 -v httpd 172.31.0.0
+```
+
+#### Task conslusion:  
+We can't access the Apache server (HTTPD) if it isn't on the same network as the Docker container.
